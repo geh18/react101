@@ -2,35 +2,54 @@ import React, {Component} from 'react';
 
 
 class List extends Component {
-
-  constructor(props, context) {
-    super(props, context);
-
-    this.state = {
-      items: [
-        'item 1',
-        'item 2',
-        'item 3',
-      ]
-    }
-  }
-
-  listItems = () => {
-    const list = this.state.items.map(function(item) {
-      return <li key={item}>{item}</li>
-    });
-    return list;
+  
+  state = {
+    count: 3,
+    items: []
   }
 
   componentWillMount() {
-    this.setState({items: this.state.items})
+    this.populateItems();
+  }
+
+  populateItems = () => {
+    const items = [];
+    for (let i=0; i < this.state.count; i++) {
+      items.push('item ' + i);
+    }
+    this.setState({items: items})
+  }
+
+  listItems = () => {
+    return this.state.items.map(function(item) {
+      return <li key={item}>{item}</li>
+    });
+  }
+
+  addToList = () => {
+    this.setState({count: this.state.count + 1});
+    this.populateItems();
+  }
+
+  removeFromList = () => {
+    this.setState({count: this.state.count - 1});
+    this.populateItems();
   }
 
   render() {
     return (
-      <ul>
-        {this.listItems}
-      </ul>
+      <div>
+        <button onClick={this.addToList}>Add</button>
+        <br></br>
+        <button onClick={this.removeFromList}>Remove</button>
+        <ul>
+          {
+            this.state.items.map(function(item) {
+              return <li key={item}>{item}</li>
+            })
+          }
+        </ul>
+      </div>
     )
   }
 }
